@@ -15,10 +15,9 @@ class UserModelTestCase(unittest.TestCase):
         db.drop_all()
         self.app_context.pop()
 
-    def test_pasword_setter(self):
+    def test_password_setter(self):
         u = User(password='cat')
         self.assertTrue(u.password_hash is not None)
-        pass
 
     def test_no_password_getter(self):
         u = User(password='cat')
@@ -58,3 +57,19 @@ class UserModelTestCase(unittest.TestCase):
         token = u.generate_confirmation_token(1)
         time.sleep(2)
         self.assertFalse(u.confirm(token))
+
+    def test_valid_reset_token(self):
+        u = User(password='cat')
+        db.session.add(u)
+        db.session.commit()
+        token = u.generate_reset_token()
+        self.assertTrue(User.reset_password(token, 'dog'))
+        self.assertTrue(u.verify_password('dog'))
+    
+    def test_invalid_reset_token(self):
+        u = User(password='cat')
+        db.session.add(u)
+        db.session.commit()
+        token = u.generate_reset_token()
+        self.assertFalse(User.reset_password(token + 'a', 'horse'))
+        self.assertTrue(u.verify_password('cat'))
