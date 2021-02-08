@@ -13,6 +13,7 @@ class Config:
     SBLOG_MAIL_SENDER = 'SBLOG Admin <SBLOG@example.com>'
     SBLOG_ADMIN = os.environ.get('SBLOG_ADMIN')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SBLOG_POSTS_PER_PAGE = 20
 
     @staticmethod
     def init_app(app):
