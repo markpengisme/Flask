@@ -1,1 +1,2 @@
 -r common.txt
+idna==3.1
