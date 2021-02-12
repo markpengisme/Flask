@@ -49,3 +49,19 @@ def test(coverage, test_names):
         COV.html_report(directory=covdir)
         print('HTML version: file://%s/index.html' % covdir)
         COV.erase()
+
+## It does not work on flask version 1.x, so replace it with environmental variables.
+# @app.cli.command()
+# @click.option('--length', default=25,
+#               help='Number of functions to include in the profiler report.')
+# @click.option('--profile-dir', default=None,
+#               help='Directory where profiler data files are saved.')
+# def profile(length, profile_dir):
+#     """Start the application under the code profiler."""
+#     from werkzeug.contrib.profiler import ProfilerMiddleware
+#     app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[length],
+#                                       profile_dir=profile_dir)
+#     app.run(debug=False)
+if os.environ.get('FLASK_PROFILE') == 'open':
+    from werkzeug.middleware.profiler import ProfilerMiddleware
+    app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[25])
